@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: wallet-ms
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/wallet
+    username: user
+    password: 123456
+  jpa:
+#    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        store_data_at_delete: true
+        default_schema: wallet_ms
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    enabled: true
+server:
+  port: ${PORT:9595}
+
+jwt:
+  secret: 413F4428472B4B6250655368566D5970337336763979244226452948404D6351
