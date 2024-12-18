@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "auth-wallet-ms", url = "http://localhost:9090", configuration = FeignClientInterceptor.class)
+@FeignClient(name = "auth-wallet-ms", url = "https://auth-wallet-ms-6b5e5d2763f7.herokuapp.com", configuration = FeignClientInterceptor.class)
 public interface UserClient {
 
     @GetMapping("/users/profile/{phoneNumber}")
