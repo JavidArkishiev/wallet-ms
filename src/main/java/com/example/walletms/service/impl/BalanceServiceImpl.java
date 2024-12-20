@@ -2,8 +2,11 @@ package com.example.walletms.service.impl;
 
 import com.example.walletms.dto.request.PaymentRequest;
 import com.example.walletms.dto.response.BalanceResponse;
+import com.example.walletms.dto.response.BalanceResponseDetails;
 import com.example.walletms.entity.Balance;
 import com.example.walletms.entity.Transaction;
+import com.example.walletms.exception.ResourceFoundException;
+import com.example.walletms.mapper.BalanceMapper;
 import com.example.walletms.repository.BalanceRepository;
 import com.example.walletms.service.BalanceService;
 import com.example.walletms.service.JwtService;
@@ -23,6 +26,7 @@ import static com.example.walletms.enums.TransactionType.TOP_UP;
 public class BalanceServiceImpl implements BalanceService {
     private final JwtService jwtService;
     private final BalanceRepository balanceRepository;
+    private final BalanceMapper balanceMapper;
 
     @Override
     public void topUp(PaymentRequest paymentRequest, HttpServletRequest servletRequest) {
@@ -79,6 +83,14 @@ public class BalanceServiceImpl implements BalanceService {
         return new BalanceResponse(lastBalance.getBalanceId(),
                 lastBalance.getTotalBalance(),
                 lastBalance.getCreateAt());
+
+    }
+
+    @Override
+    public BalanceResponseDetails getBalanceById(UUID balanceId) {
+        var balance = balanceRepository.findById(balanceId)
+                .orElseThrow(() -> new ResourceFoundException("Balance not found"));
+        return balanceMapper.mapToDto(balance);
 
     }
 }
