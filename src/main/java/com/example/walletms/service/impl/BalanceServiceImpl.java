@@ -3,11 +3,14 @@ package com.example.walletms.service.impl;
 import com.example.walletms.dto.request.PaymentRequest;
 import com.example.walletms.dto.response.BalanceResponse;
 import com.example.walletms.dto.response.BalanceResponseDetails;
+import com.example.walletms.dto.response.TransactionResponse;
+import com.example.walletms.dto.response.TransactionResponseDetails;
 import com.example.walletms.entity.Balance;
 import com.example.walletms.entity.Transaction;
 import com.example.walletms.exception.ResourceFoundException;
 import com.example.walletms.mapper.BalanceMapper;
 import com.example.walletms.repository.BalanceRepository;
+import com.example.walletms.repository.TransactionRepository;
 import com.example.walletms.service.BalanceService;
 import com.example.walletms.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,6 +30,7 @@ public class BalanceServiceImpl implements BalanceService {
     private final JwtService jwtService;
     private final BalanceRepository balanceRepository;
     private final BalanceMapper balanceMapper;
+    private final TransactionRepository transactionRepository;
 
     @Override
     public void topUp(PaymentRequest paymentRequest, HttpServletRequest servletRequest) {
@@ -91,6 +95,14 @@ public class BalanceServiceImpl implements BalanceService {
         var balance = balanceRepository.findById(balanceId)
                 .orElseThrow(() -> new ResourceFoundException("Balance not found"));
         return balanceMapper.mapToDto(balance);
+
+    }
+
+    @Override
+    public TransactionResponseDetails getBalanceByTransactionId(UUID transactionId) {
+        var transaction = transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new ResourceFoundException("Transaction not found"));
+        return balanceMapper.mapToDtoTransaction(transaction);
 
     }
 }
