@@ -17,17 +17,18 @@ import java.util.UUID;
 @RestController
 @RequestMapping("history")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('USER')")
 public class HistoryController {
     private final TransactionService transactionService;
 
-    @GetMapping
+    @GetMapping("my-transaction")
+    @PreAuthorize("hasAuthority('USER')")
     public BaseResponse<List<TransactionResponse>> getAllHistory(HttpServletRequest servletRequest) {
         return BaseResponse.oK(transactionService.getAllHistory(servletRequest));
 
     }
 
     @GetMapping("transaction/{transactionId}")
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     public BaseResponse<TransactionResponse> getTransactionById(@PathVariable UUID transactionId) {
         return BaseResponse
                 .oK(transactionService.getTransactionById(transactionId));
