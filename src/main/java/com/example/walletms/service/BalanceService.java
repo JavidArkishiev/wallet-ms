@@ -11,6 +11,8 @@ import java.util.UUID;
 public interface BalanceService {
     void topUp(PaymentRequest paymentRequest, HttpServletRequest servletRequest);
 
+    void createNewBalance(String message);
+
     BalanceResponse getMyBalance(HttpServletRequest servletRequest);
 
     BalanceResponseDetails getBalanceById(UUID balanceId);

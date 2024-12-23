@@ -3,7 +3,6 @@ package com.example.walletms.service.impl;
 import com.example.walletms.dto.request.PaymentRequest;
 import com.example.walletms.dto.response.BalanceResponse;
 import com.example.walletms.dto.response.BalanceResponseDetails;
-import com.example.walletms.dto.response.TransactionResponse;
 import com.example.walletms.dto.response.TransactionResponseDetails;
 import com.example.walletms.entity.Balance;
 import com.example.walletms.entity.Transaction;
@@ -15,6 +14,8 @@ import com.example.walletms.service.BalanceService;
 import com.example.walletms.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -67,6 +68,19 @@ public class BalanceServiceImpl implements BalanceService {
 
         newBalance.getTransactions().add(transaction);
         balanceRepository.save(newBalance);
+    }
+
+    @Override
+    @KafkaListener(topics = "verified-user", groupId = "myVerifyUser")
+    @Async
+    public void createNewBalance(String message) {
+        Balance balance = new Balance();
+        balance.setAmount(BigDecimal.ZERO);
+        balance.setCreateAt(LocalDateTime.now());
+        balance.setCurrency(AZN);
+        balance.setTotalBalance(BigDecimal.ZERO);
+        balance.setPhoneNumber(message);
+        balanceRepository.save(balance);
     }
 
     @Override

@@ -2,12 +2,21 @@ spring:
   application:
     name: wallet-ms
 
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: myVerifyUser
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+
+
   datasource:
     url: jdbc:postgresql://localhost:5433/wallet
     username: user
     password: 123456
   jpa:
-#    show-sql: true
+    #    show-sql: true
     hibernate:
       ddl-auto: update
     properties:
